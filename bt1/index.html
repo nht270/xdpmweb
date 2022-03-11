@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List product</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .product {
+            border: 2px solid #ccc;
+            height: 100px;
+            width: fit-content;
+            display: inline-block;
+            border-radius: 3px;
+            margin: 10px;
+            padding: 10px 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+    </div>
+    <script>
+        const URL_API = 'https://621ccde8768a4e1020b5b14b.mockapi.io/v1/product/'
+
+        $(document).ready(function () {
+            $.get(URL_API, (data, status) => {
+                let root = document.querySelector('#root')
+                for (item of data) {
+                    let product =
+                        `<div class="product" id="${item.id}" onclick="deleteProduct('${item.id}')">
+                            Ten: ${item.name}
+                                <br>
+                            Gia: ${item.price}
+                        </div>`
+                    root.innerHTML += product
+                }
+            })
+        });
+
+        function deleteProduct(id) {
+            $.ajax({
+                type: "DELETE",
+                url: URL_API + id,
+                success: function (data) {
+                    $(`#${id}`).hide();
+                    console.log(data)
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
